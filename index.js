@@ -1,7 +1,7 @@
 // index.js
 import express from 'express';
 
-export default app = express()
+export const app = express()
 const PORT = 4000
 
 app.listen(PORT, () => {
