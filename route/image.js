@@ -91,8 +91,9 @@ function landsatCloudMask(image){
 // Sentinel 2
 function sentinel2(date, bounds, bands){
 	const s2 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED');
-	bands.push('SCL');
-	const col = filterImage(s2, date, bounds).select(bands);
+	const cloudBands = Array.from(bands)
+	cloudBands.push('SCL');
+	const col = filterImage(s2, date, bounds).select(cloudBands);
 	return col.map(s2Cloudmask);
 }
 
