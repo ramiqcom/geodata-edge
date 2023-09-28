@@ -1,19 +1,22 @@
 // Import packages
 import ee from '@google/earthengine';
+import { simplify } from '@turf/turf';
 
 // Export main function
 export default function image(parameter, res){
-	const { date, satellite, geojson, visualization } = parameter;
+	let { date, satellite, geojson, visualization } = parameter;
 
+	// GeoJSON size simplification for payload
+	const geojsonSize = JSON.stringify(geojson).length;
+	if (geojsonSize > 1e5) {
+		geojson = simplify(geojson, { tolerance: 0.0001, mutate: true });
+	};
+	
 	// Error margin
-	const smallMargin = ee.ErrorMargin(1, 'meters');
 	const bigMargin = ee.ErrorMargin(1e4, 'meters');
 
 	// Feature collection
 	const col = ee.FeatureCollection(geojson);
-
-	// Feature collection
-	const simplified = col.map(feat => feat.simplify(smallMargin));
 
 	// Bounds
 	const bounds = col.map(feat => feat.bounds(bigMargin)).geometry(bigMargin).bounds(bigMargin);
