@@ -6,20 +6,11 @@ import { simplify } from '@turf/turf';
 export default function image(parameter, res){
 	let { date, satellite, geojson, visualization } = parameter;
 
-	// GeoJSON size simplification for payload
-	const geojsonSize = JSON.stringify(geojson).length;
-	if (geojsonSize > 1e5) {
-		geojson = simplify(geojson, { tolerance: 0.0001, mutate: true });
-	};
-	
 	// Error margin
 	const bigMargin = ee.ErrorMargin(1e4, 'meters');
 
-	// Feature collection
-	const col = ee.FeatureCollection(geojson);
-
 	// Bounds
-	const bounds = col.map(feat => feat.bounds(bigMargin)).geometry(bigMargin).bounds(bigMargin);
+	const bounds = ee.Feature(geojson).geometry(bigMargin);
 
 	// Date
 	const startDate = ee.Date(date[0]);
