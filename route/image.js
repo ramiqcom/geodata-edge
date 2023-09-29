@@ -1,6 +1,5 @@
 // Import packages
 import ee from '@google/earthengine';
-import { simplify } from '@turf/turf';
 
 // Export main function
 export default function image(parameter, res){
