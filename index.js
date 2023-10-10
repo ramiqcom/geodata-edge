@@ -2,6 +2,7 @@
 import express from 'express';
 import ee from '@google/earthengine';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // Import routes
 import image from './route/image.js';
@@ -19,14 +20,7 @@ const key = JSON.parse(process.env.EE_KEY);
 // Express package
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: false }));
-
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Replace with your actual domain
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+app.use(cors());
 
 // Run authentication
 app.use((req, res, next) => {
